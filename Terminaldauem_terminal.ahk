@@ -10,13 +10,6 @@ if !A_IsAdmin {
 	ExitApp
 }
 
-
-^d:: 
-If WinActive("ahk_exe cmd.exe") {
-	send exit{enter}
-}
-return 
-
 ^!t::
 MouseGetPos, , , WndH
 WinGet Process, ProcessName, ahk_id %WndH%
