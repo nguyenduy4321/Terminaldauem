@@ -28,6 +28,7 @@ If ( Process = "explorer.exe" ) {
 		}
 	 StringTrimLeft, Location, URL, 8 ; remove "file:///"
 	 StringReplace Location, Location, /, \, All
+	 Location:=urlToText(Location)
 	}
 	if (Location == "")
 	{
@@ -74,6 +75,7 @@ If ( Process = "explorer.exe" ) {
 		}
 	 StringTrimLeft, Location, URL, 8 ; remove "file:///"
 	 StringReplace Location, Location, /, \, All
+	 Location:=urlToText(Location)
 	}
 	if (Location == "")
 	{
@@ -88,3 +90,11 @@ If ( Process = "explorer.exe" ) {
 }
 
 return
+
+urlToText(url) {
+ ; https://www.autohotkey.com/boards/viewtopic.php?style=17&p=292740#p292740
+ VarSetCapacity(text, 600)
+ DllCall("shlwapi\PathCreateFromUrl" (A_IsUnicode?"W":"A")
+  , "Str", "file:" url, "Str", text, "UInt*", 300, "UInt", 0)
+ Return text
+}
