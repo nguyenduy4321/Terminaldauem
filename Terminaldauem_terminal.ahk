@@ -13,7 +13,6 @@ if !A_IsAdmin {
 }
 
 ^!t::
-EnvUpdate
 MouseGetPos, , , WndH
 WinGet Process, ProcessName, ahk_id %WndH%
 
@@ -37,7 +36,7 @@ If ( Process = "explorer.exe" ) {
 	{
 		; ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(Chr(34) ComSpec Chr(34), "/K pushd ""C:\Users\" . A_UserName . """ & title Cmd")
 		
-		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(CMDER_EXE,"/single /task ""cmd::Cmder""" . Chr(32) . "C:\Users\" . A_UserName)
+		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(CMDER_EXE,"/task ""cmd::Cmder""" . Chr(32) . "C:\Users\" . A_UserName)
 	
 		; Run %ComSpec% /K pushd "C:\Users\%A_UserName%" & title Cmder & "D:\portapps\cmder\vendor\init.bat"
 	}
@@ -45,7 +44,7 @@ If ( Process = "explorer.exe" ) {
 	{
 		; ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(Chr(34) ComSpec Chr(34),"/k pushd " . Location . " & title Cmd")
 		
-		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(CMDER_EXE,"/single /task ""cmd::Cmder""" . Chr(32) . Location)
+		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(CMDER_EXE,"/task ""cmd::Cmder""" . Chr(32) . Location)
 		
 		; Run %ComSpec% /K pushd "%Location%" & title Cmder & "D:\portapps\cmder\vendor\init.bat"
 	}
@@ -54,7 +53,6 @@ If ( Process = "explorer.exe" ) {
 return
 	
 ^!+t::
-EnvUpdate
 MouseGetPos, , , WndH
 WinGet Process, ProcessName, ahk_id %WndH%
 
@@ -78,7 +76,7 @@ If ( Process = "explorer.exe" ) {
 	{
 		; Run *Runas %ComSpec% /K pushd "C:\Users\%A_UserName%" & title Cmd
 		
-		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(CMDER_EXE,"/single /task ""cmd::Cmder as Admin""" . Chr(32) . "C:\Users\" . A_UserName)
+		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(CMDER_EXE,"/task ""cmd::Cmder as Admin""" . Chr(32) . "C:\Users\" . A_UserName)
 	
 		; Run *Runas %ComSpec% /K pushd "C:\Users\%A_UserName%" & title Cmder & "D:\portapps\cmder\vendor\init.bat"
 	}
@@ -86,7 +84,7 @@ If ( Process = "explorer.exe" ) {
 	{
 		; Run *Runas %ComSpec% /K pushd "%Location%" & title Cmd
 		
-		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(CMDER_EXE,"/single /task ""cmd::Cmder as Admin""" . Chr(32) . Location)
+		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(CMDER_EXE,"/task ""cmd::Cmder as Admin""" . Chr(32) . Location)
 		
 		; Run *Runas %ComSpec% /K pushd "%Location%" & title Cmder & "D:\portapps\cmder\vendor\init.bat"
 	}
