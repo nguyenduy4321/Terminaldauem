@@ -5,12 +5,15 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
+EnvGet, CMDER_EXE, CMDER_EXE
+
 if !A_IsAdmin {
 	Run *Runas %A_ScriptFullPath%
 	ExitApp
 }
 
 ^!t::
+EnvUpdate
 MouseGetPos, , , WndH
 WinGet Process, ProcessName, ahk_id %WndH%
 
@@ -32,32 +35,26 @@ If ( Process = "explorer.exe" ) {
 	}
 	if (Location == "")
 	{
-		if !A_IsAdmin
-		{
-			Run %ComSpec% /K pushd "C:\Users\%A_UserName%" & title Cmd
-		}
-		else
-		{
-			ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(Chr(34) ComSpec Chr(34), "/K pushd ""C:\Users\" . A_UserName . """ & title Cmd")
-		}
+		; ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(Chr(34) ComSpec Chr(34), "/K pushd ""C:\Users\" . A_UserName . """ & title Cmd")
+		
+		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(CMDER_EXE,"/single /task ""cmd::Cmder""" . Chr(32) . "C:\Users\" . A_UserName)
+	
 		; Run %ComSpec% /K pushd "C:\Users\%A_UserName%" & title Cmder & "D:\portapps\cmder\vendor\init.bat"
 	}
 	else 
 	{
-		if !A_IsAdmin
-		{
-			Run %ComSpec% /K pushd "%Location%" & title Cmd
-		}
-		else
-		{
-			ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(Chr(34) ComSpec Chr(34),"/k pushd " . Location . " & title Cmd")
-		}
+		; ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(Chr(34) ComSpec Chr(34),"/k pushd " . Location . " & title Cmd")
+		
+		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(CMDER_EXE,"/single /task ""cmd::Cmder""" . Chr(32) . Location)
+		
 		; Run %ComSpec% /K pushd "%Location%" & title Cmder & "D:\portapps\cmder\vendor\init.bat"
 	}
 }
+
 return
 	
 ^!+t::
+EnvUpdate
 MouseGetPos, , , WndH
 WinGet Process, ProcessName, ahk_id %WndH%
 
@@ -79,16 +76,21 @@ If ( Process = "explorer.exe" ) {
 	}
 	if (Location == "")
 	{
-		Run *Runas %ComSpec% /K pushd "C:\Users\%A_UserName%" & title Cmd
+		; Run *Runas %ComSpec% /K pushd "C:\Users\%A_UserName%" & title Cmd
+		
+		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(CMDER_EXE,"/single /task ""cmd::Cmder as Admin""" . Chr(32) . "C:\Users\" . A_UserName)
+	
 		; Run *Runas %ComSpec% /K pushd "C:\Users\%A_UserName%" & title Cmder & "D:\portapps\cmder\vendor\init.bat"
 	}
 	else  
 	{
-		Run *Runas %ComSpec% /K pushd "%Location%" & title Cmd
+		; Run *Runas %ComSpec% /K pushd "%Location%" & title Cmd
+		
+		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(CMDER_EXE,"/single /task ""cmd::Cmder as Admin""" . Chr(32) . Location)
+		
 		; Run *Runas %ComSpec% /K pushd "%Location%" & title Cmder & "D:\portapps\cmder\vendor\init.bat"
 	}
 }
-
 return
 
 urlToText(url) {
