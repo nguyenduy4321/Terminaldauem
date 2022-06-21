@@ -5,7 +5,7 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
-EnvGet, CMDER_EXE, CMDER_EXE
+EnvGet, CMDER_INITBAT, CMDER_INITBAT
 
 if !A_IsAdmin {
 	Run *Runas %A_ScriptFullPath%
@@ -34,22 +34,13 @@ If ( Process = "explorer.exe" ) {
 	}
 	if (Location == "")
 	{
-		; ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(Chr(34) ComSpec Chr(34), "/K pushd ""C:\Users\" . A_UserName . """ & title Cmd")
-		
-		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(CMDER_EXE,"/task ""cmd::Cmder""" . Chr(32) . "C:\Users\" . A_UserName)
-	
-		; Run %ComSpec% /K pushd "C:\Users\%A_UserName%" & title Cmder & "D:\portapps\cmder\vendor\init.bat"
+		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(Chr(34) ComSpec Chr(34),"/k ""title Cmder & cd /d C:\Users\" . A_UserName . " & %CMDER_INITBAT%""")
 	}
 	else 
 	{
-		; ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(Chr(34) ComSpec Chr(34),"/k pushd " . Location . " & title Cmd")
-		
-		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(CMDER_EXE,"/task ""cmd::Cmder""" . Chr(32) . Location)
-		
-		; Run %ComSpec% /K pushd "%Location%" & title Cmder & "D:\portapps\cmder\vendor\init.bat"
+		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(Chr(34) ComSpec Chr(34),"/k ""title Cmder & cd /d " . Location . " & %CMDER_INITBAT%""")
 	}
 }
-
 return
 	
 ^!+t::
@@ -74,27 +65,20 @@ If ( Process = "explorer.exe" ) {
 	}
 	if (Location == "")
 	{
-		; Run *Runas %ComSpec% /K pushd "C:\Users\%A_UserName%" & title Cmd
-		
-		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(CMDER_EXE,"/task ""cmd::Cmder as Admin""" . Chr(32) . "C:\Users\" . A_UserName)
-	
-		; Run *Runas %ComSpec% /K pushd "C:\Users\%A_UserName%" & title Cmder & "D:\portapps\cmder\vendor\init.bat"
+		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(Chr(34) ComSpec Chr(34),"/k ""title Cmder & cd /d " . A_WINDIR . "\System32 & %CMDER_INITBAT%""" ,,"runas")
 	}
 	else  
 	{
-		; Run *Runas %ComSpec% /K pushd "%Location%" & title Cmd
-		
-		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(CMDER_EXE,"/task ""cmd::Cmder as Admin""" . Chr(32) . Location)
-		
-		; Run *Runas %ComSpec% /K pushd "%Location%" & title Cmder & "D:\portapps\cmder\vendor\init.bat"
+		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(Chr(34) ComSpec Chr(34),"/k ""title Cmder & cd /d " . Location . " & %CMDER_INITBAT%""" ,,"runas")
 	}
 }
 return
+
 
 urlToText(url) {
  ; https://www.autohotkey.com/boards/viewtopic.php?style=17&p=292740#p292740
  VarSetCapacity(text, 600)
  DllCall("shlwapi\PathCreateFromUrl" (A_IsUnicode?"W":"A")
   , "Str", "file:" url, "Str", text, "UInt*", 300, "UInt", 0)
- Return text
+ return text
 }
