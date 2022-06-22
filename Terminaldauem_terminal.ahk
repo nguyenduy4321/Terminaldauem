@@ -4,7 +4,11 @@
 #SingleInstance Force
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
-IniRead, DefaultShell, ./config.ini, Settings, DefaultShell
+
+
+EnvGet, CMDER_INITBAT, CMDER_INITBAT
+
+
 if !A_IsAdmin {
 	Run *Runas %A_ScriptFullPath%
 	ExitApp
@@ -34,7 +38,9 @@ If ( Process = "explorer.exe" ) {
 	Location := urlToText(Location)
 	if (Location == "")
 	{
+
 		Location = "C:\Users\%A_UserName%"
+
 	}
 
 	ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(WindowTerminal , "-w Terminal_Dau_em nt -d" . Location)
@@ -65,7 +71,9 @@ If ( Process = "explorer.exe" ) {
 	Location := urlToText(Location)
 	if (Location == "")
 	{
+
 		Location = "C:\Users\%A_UserName%"
+
 	}
 
 	ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(WindowTerminal , "-w Terminal_Dau_em nt -d" . Location,,"Runas")
@@ -74,10 +82,12 @@ If ( Process = "explorer.exe" ) {
 
 return
 
+
 urlToText(url) {
  ; https://www.autohotkey.com/boards/viewtopic.php?style=17&p=292740#p292740
  VarSetCapacity(text, 600)
  DllCall("shlwapi\PathCreateFromUrl" (A_IsUnicode?"W":"A")
   , "Str", "file:" url, "Str", text, "UInt*", 300, "UInt", 0)
- Return text
+ return text
 }
+
