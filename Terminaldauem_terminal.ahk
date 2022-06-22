@@ -68,7 +68,8 @@ If ( Process = "explorer.exe" ) {
 		Location = "C:\Users\%A_UserName%"
 	}
 
-	Run *Runas WindowTerminal  "-w \"Terminal Dau em adub\" nt -d" Location
+	ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(WindowTerminal , "-w Terminal_Dau_em nt -d" . Location,,"Runas")
+	; Run *Runas WindowTerminal  "-w \"Terminal Dau em adub\" nt -d" Location
 }
 
 return
