@@ -5,12 +5,15 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
+
 EnvGet, CMDER_INITBAT, CMDER_INITBAT
+
 
 if !A_IsAdmin {
 	Run *Runas %A_ScriptFullPath%
 	ExitApp
 }
+WindowTerminal = "wt"
 
 ^!t::
 MouseGetPos, , , WndH
@@ -32,14 +35,16 @@ If ( Process = "explorer.exe" ) {
 	 StringReplace Location, Location, /, \, All
 	 Location:=urlToText(Location)
 	}
+	Location := urlToText(Location)
 	if (Location == "")
 	{
-		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(Chr(34) ComSpec Chr(34),"/k ""title Cmder & cd /d C:\Users\" . A_UserName . " & %CMDER_INITBAT%""")
+
+		Location = "C:\Users\%A_UserName%"
+
 	}
-	else 
-	{
-		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(Chr(34) ComSpec Chr(34),"/k ""title Cmder & cd /d " . Location . " & %CMDER_INITBAT%""")
-	}
+
+	ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(WindowTerminal , "-w Terminal_Dau_em nt -d" . Location)
+
 }
 return
 	
@@ -63,14 +68,16 @@ If ( Process = "explorer.exe" ) {
 	 StringReplace Location, Location, /, \, All
 	 Location:=urlToText(Location)
 	}
+	Location := urlToText(Location)
 	if (Location == "")
 	{
-		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(Chr(34) ComSpec Chr(34),"/k ""title Cmder & cd /d " . A_WINDIR . "\System32 & %CMDER_INITBAT%""" ,,"runas")
+
+		Location = "C:\Users\%A_UserName%"
+
 	}
-	else  
-	{
-		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(Chr(34) ComSpec Chr(34),"/k ""title Cmder & cd /d " . Location . " & %CMDER_INITBAT%""" ,,"runas")
-	}
+
+	ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(WindowTerminal , "-w Terminal_Dau_em nt -d" . Location,,"Runas")
+	; Run *Runas WindowTerminal  "-w \"Terminal Dau em adub\" nt -d" Location
 }
 
 return
@@ -83,3 +90,4 @@ urlToText(url) {
   , "Str", "file:" url, "Str", text, "UInt*", 300, "UInt", 0)
  return text
 }
+
