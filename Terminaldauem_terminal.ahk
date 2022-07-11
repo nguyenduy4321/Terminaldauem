@@ -12,7 +12,7 @@ if !A_IsAdmin {
 	ExitApp
 }
 
-^!t::
+$~^!t::
 MouseGetPos, , , WndH
 WinGet Process, ProcessName, ahk_id %WndH%
 
@@ -42,8 +42,9 @@ If ( Process = "explorer.exe" ) {
 	}
 }
 return
+
 	
-^!+t::
+$~^!+t::
 MouseGetPos, , , WndH
 WinGet Process, ProcessName, ahk_id %WndH%
 
@@ -72,9 +73,15 @@ If ( Process = "explorer.exe" ) {
 		ComObjCreate("Shell.Application").Windows.FindWindowSW(0, 0, 8, 0, 1).Document.Application.ShellExecute(Chr(34) ComSpec Chr(34),"/k ""title Cmder & cd /d " . Location . " & %CMDER_INITBAT%""" ,,"runas")
 	}
 }
-
 return
 
+^!ScrollLock::SendMessage, 0x112, 0xF140, 0,, Program Manager
+
+^BS::
+send, ^+{left}
+sleep 1
+send {Backspace}
+return
 
 urlToText(url) {
  ; https://www.autohotkey.com/boards/viewtopic.php?style=17&p=292740#p292740
